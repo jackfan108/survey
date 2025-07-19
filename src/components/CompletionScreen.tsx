@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/// <reference types="vite/client" />
+import { useState, useEffect } from 'react';
 import { Check } from 'lucide-react';
 
 export const CompletionScreen: React.FC = () => {
