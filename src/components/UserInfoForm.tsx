@@ -43,11 +43,8 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
     <div className="max-w-sm mx-auto">
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl">
         <div className="text-center mb-8">
-          <div className="bg-blue-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-            <User size={32} className="text-blue-300" />
-          </div>
           <h1 className="text-3xl font-bold text-white mb-2">Political Survey</h1>
-          <p className="text-gray-300 text-base">Help us understand your political views</p>
+          <p className="text-gray-300 text-base">Help us understand your political views.</p>
         </div>
 
         <div className="space-y-6">

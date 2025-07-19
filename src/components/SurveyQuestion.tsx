@@ -98,7 +98,7 @@ export const SurveyQuestion: React.FC<SurveyQuestionProps> = ({
           {/* Importance Scale (1-5) */}
           <div className="space-y-6 pt-8 border-t border-white/20">
             <h3 className="text-lg font-semibold text-white text-center">
-              How important is this issue to you personally?
+              How important is this issue to you personally? (regardless of relevance)
             </h3>
             <div className="flex justify-center items-center space-x-4">
               <span className="text-base text-gray-200">Barely matters</span>
