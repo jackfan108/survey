@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRight, User } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 interface UserInfo {
   firstName: string;
