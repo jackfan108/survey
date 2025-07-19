@@ -152,7 +152,7 @@ const SurveyApp = () => {
   };
 
   return (
-    <div className="h-dvh bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
+    <div className="main-content h-full w-full" style={{ height: '100dvh' }}>
       {step === 'user-info' && (
         <div className="h-full p-4 sm:p-6 md:p-8 flex items-center justify-center w-full">
           <div className="w-full">
