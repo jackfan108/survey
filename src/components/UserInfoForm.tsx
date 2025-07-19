@@ -40,7 +40,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-sm mx-auto">
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl">
         <div className="text-center mb-8">
           <div className="bg-blue-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">

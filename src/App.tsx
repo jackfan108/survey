@@ -154,13 +154,15 @@ const SurveyApp = () => {
   return (
     <div className="h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 overflow-hidden">
       {step === 'user-info' && (
-        <div className="h-full p-4 flex items-center justify-center">
-          <UserInfoForm
-            userInfo={userInfo}
-            setUserInfo={setUserInfo}
-            onSubmit={handleUserInfoSubmit}
-            loading={loading}
-          />
+        <div className="h-full p-4 flex items-center justify-center w-full">
+          <div className="w-full">
+            <UserInfoForm
+              userInfo={userInfo}
+              setUserInfo={setUserInfo}
+              onSubmit={handleUserInfoSubmit}
+              loading={loading}
+            />
+          </div>
         </div>
       )}
       
