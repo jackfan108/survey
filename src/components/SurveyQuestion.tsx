@@ -43,7 +43,7 @@ export const SurveyQuestion: React.FC<SurveyQuestionProps> = ({
   };
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-dvh flex flex-col overflow-hidden">
       {/* Progress Bar - Fixed at top */}
       <div className="w-full px-4 sm:px-6 py-4 sm:py-6 flex-shrink-0">
         <div className="max-w-2xl mx-auto">

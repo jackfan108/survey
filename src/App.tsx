@@ -152,7 +152,7 @@ const SurveyApp = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 overflow-hidden">
+    <div className="h-dvh bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 overflow-hidden">
       {step === 'user-info' && (
         <div className="h-full p-4 sm:p-6 md:p-8 flex items-center justify-center w-full">
           <div className="w-full">
