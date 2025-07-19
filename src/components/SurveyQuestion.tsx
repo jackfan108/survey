@@ -62,22 +62,22 @@ export const SurveyQuestion: React.FC<SurveyQuestionProps> = ({
 
       {/* Question Content - Centered */}
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 overflow-y-auto">
-        <div className="max-w-2xl w-full space-y-6 sm:space-y-8">
+        <div className="max-w-2xl w-full space-y-4 sm:space-y-8">
           {/* Question Text */}
           <div className="text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 sm:mb-8 leading-tight">
+            <h2 className="text-lg sm:text-2xl font-bold text-white mb-4 sm:mb-8 leading-tight">
               {question.question_text}
             </h2>
           </div>
 
           {/* Opinion Scale (0-10) */}
-          <div className="space-y-4 sm:space-y-6">
-            <h3 className="text-base sm:text-lg font-semibold text-white text-center">Your Position</h3>
+          <div className="space-y-3 sm:space-y-6">
+            <h3 className="text-sm sm:text-lg font-semibold text-white text-center">Your Position</h3>
             
             {/* Mobile Slider */}
             <div className="sm:hidden">
-              <div className="text-center mb-4">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full border-2 text-xl font-bold ${
+              <div className="text-center mb-3">
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full border-2 text-lg font-bold ${
                   currentAnswer.opinion_score !== undefined 
                     ? 'border-blue-400 bg-blue-500 text-white' 
                     : 'border-gray-400 bg-white/10 text-gray-400'
@@ -140,20 +140,20 @@ export const SurveyQuestion: React.FC<SurveyQuestionProps> = ({
           </div>
 
           {/* Importance Scale (1-5) */}
-          <div className="space-y-4 sm:space-y-6 pt-6 sm:pt-8 border-t border-white/20">
-            <h3 className="text-base sm:text-lg font-semibold text-white text-center">
-              How important is this issue to you personally? (regardless of relevance)
+          <div className="space-y-3 sm:space-y-6 pt-4 sm:pt-8 border-t border-white/20">
+            <h3 className="text-sm sm:text-lg font-semibold text-white text-center">
+              How important is this issue to you personally?
             </h3>
-            <div className="flex justify-center items-center space-x-3 sm:space-x-4">
+            <div className="flex justify-center items-center space-x-2 sm:space-x-4">
               <span className="text-xs sm:text-base text-gray-200">Barely matters</span>
-              <div className="flex space-x-2 sm:space-x-4">
+              <div className="flex space-x-1 sm:space-x-4">
                 {Array.from({ length: 5 }, (_, i) => {
                   const value = i + 1;
                   return (
                     <button
                       key={value}
                       onClick={() => onAnswerChange('importance_score', value)}
-                      className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full border-2 text-sm sm:text-base font-semibold transition-all cursor-pointer ${
+                      className={`w-8 h-8 sm:w-14 sm:h-14 rounded-full border-2 text-xs sm:text-base font-semibold transition-all cursor-pointer ${
                         currentAnswer.importance_score === value
                           ? 'border-blue-400 bg-blue-500 text-white'
                           : 'border-gray-400 bg-white/10 text-gray-200 hover:border-blue-300 hover:bg-white/20'
