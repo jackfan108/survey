@@ -73,15 +73,15 @@ export const SurveyQuestion: React.FC<SurveyQuestionProps> = ({
           {/* Opinion Scale (0-10) */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-white text-center">Your Position</h3>
-            <div className="flex justify-between items-center gap-1">
+            <div className="flex justify-center items-center gap-2">
               {Array.from({ length: 11 }, (_, i) => (
                 <button
                   key={i}
                   onClick={() => onAnswerChange('opinion_score', i)}
-                  className={`w-16 h-16 rounded-full border-2 text-lg font-semibold transition-all cursor-pointer ${
+                  className={`w-14 h-14 rounded-full border-2 text-base font-semibold transition-all cursor-pointer flex-shrink-0 ${
                     currentAnswer.opinion_score === i
                       ? 'border-blue-400 bg-blue-500 text-white'
-                      : 'border-gray-400 bg-white/10 text-gray-200 hover:border-blue-300'
+                      : 'border-gray-400 bg-white/10 text-gray-200 hover:border-blue-300 hover:bg-white/20'
                   }`}
                 >
                   {i}
@@ -109,10 +109,10 @@ export const SurveyQuestion: React.FC<SurveyQuestionProps> = ({
                     <button
                       key={value}
                       onClick={() => onAnswerChange('importance_score', value)}
-                      className={`w-16 h-16 rounded-full border-2 text-lg font-semibold transition-all cursor-pointer ${
+                      className={`w-14 h-14 rounded-full border-2 text-base font-semibold transition-all cursor-pointer ${
                         currentAnswer.importance_score === value
                           ? 'border-blue-400 bg-blue-500 text-white'
-                          : 'border-gray-400 bg-white/10 text-gray-200 hover:border-blue-300'
+                          : 'border-gray-400 bg-white/10 text-gray-200 hover:border-blue-300 hover:bg-white/20'
                       }`}
                     >
                       {value}
