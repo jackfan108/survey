@@ -20,21 +20,21 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
   onSubmit,
   loading
 }) => {
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleSubmit = () => {
-    // if (!userInfo.firstName || !userInfo.lastName || !userInfo.email) {
-    //   alert('Please fill in all fields');
-    //   return;
-    // }
+    const validateEmail = (email: string) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+
+    if (!userInfo.firstName || !userInfo.lastName || !userInfo.email) {
+      alert('Please fill in all fields');
+      return;
+    }
     
-    // if (!validateEmail(userInfo.email)) {
-    //   alert('Please enter a valid email address');
-    //   return;
-    // }
+    if (!validateEmail(userInfo.email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
 
     onSubmit();
   };

@@ -8,7 +8,7 @@ export const CompletionScreen: React.FC = () => {
   useEffect(() => {
     const fetchRandomGif = async () => {
       try {
-        const response = await fetch('https://api.giphy.com/v1/gifs/random?api_key=lxGVMqO5EnOA35hVswGDWSb1Nq78hZdo&tag=politics+funny&rating=r');
+        const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${import.meta.env.VITE_GIPHY_API_KEY}&tag=politics+funny&rating=r`);
         const data = await response.json();
         
         if (data.data && data.data.images) {

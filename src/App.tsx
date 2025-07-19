@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { UserInfoForm } from './components/UserInfoForm';
 import { SurveyQuestion } from './components/SurveyQuestion';
@@ -146,7 +146,7 @@ const SurveyApp = () => {
       
     } catch (err) {
       console.error('Error completing survey:', err);
-      alert(`Error completing survey: ${err.message || err}`);
+      alert(`Error completing survey: ${err instanceof Error ? err.message : String(err)}`);
       setLoading(false);
     }
   };
