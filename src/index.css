@@ -10,3 +10,37 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Custom Slider Styles */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #3B82F6;
+  border: 2px solid #60A5FA;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.slider::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #3B82F6;
+  border: 2px solid #60A5FA;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  border: none;
+}
+
+.slider::-webkit-slider-track {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.slider::-moz-range-track {
+  height: 12px;
+  border-radius: 6px;
+  background: transparent;
+}
