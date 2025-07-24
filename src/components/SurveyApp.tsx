@@ -53,7 +53,7 @@ const SurveyApp = () => {
         if (!data || data.length === 0) {
           console.log('No questions found in database');
         } else {
-          setQuestions(data.slice(0, 1));
+          setQuestions(data);
         }
       }
     } catch (err) {
