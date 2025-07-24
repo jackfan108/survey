@@ -26,7 +26,7 @@ const ResultsPage = () => {
     try {
       // TODO: Add logic to fetch and display analysis results
       setMessage('Analysis will be available soon!');
-    } catch (error) {
+    } catch {
       setMessage('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);

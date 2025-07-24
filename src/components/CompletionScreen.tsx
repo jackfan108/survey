@@ -8,7 +8,7 @@ export const CompletionScreen: React.FC = () => {
   useEffect(() => {
     const fetchRandomGif = async () => {
       try {
-        const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${import.meta.env.VITE_GIPHY_API_KEY}&tag=politics+funny&rating=r`);
+        const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.NEXT_PUBLIC_GIPHY_API_KEY}&tag=politics+funny&rating=r`);
         const data = await response.json();
         
         if (data.data && data.data.images) {
@@ -34,7 +34,7 @@ export const CompletionScreen: React.FC = () => {
           Your responses have been recorded successfully.
         </p>
         <p className="text-sm sm:text-base text-gray-200 leading-relaxed">
-          Thank you for participating in our political survey. Your insights help us better understand if you're a libtard commie or a bigotted fascist. Stay tuned for the results!
+          Thank you for participating in our political survey. Your insights help us better understand if you&apos;re a libtard commie or a bigotted fascist. Stay tuned for the results!
         </p>
         
         {/* Random Political Meme */}
