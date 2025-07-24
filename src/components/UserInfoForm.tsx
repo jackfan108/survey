@@ -45,6 +45,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Political Survey</h1>
           <p className="text-gray-300 text-sm sm:text-base">Help us understand your political views.</p>
+          <p className="text-gray-300 text-sm sm:text-base">Results page coming soon!</p>
         </div>
 
         <div className="space-y-4 sm:space-y-6">
