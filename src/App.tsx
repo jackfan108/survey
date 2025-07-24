@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { UserInfoForm } from './components/UserInfoForm';
 import { SurveyQuestion } from './components/SurveyQuestion';
 import { CompletionScreen } from './components/CompletionScreen';
+import ResultsPage from './components/ResultsPage';
 
 interface UserInfo {
   firstName: string;
@@ -61,7 +63,6 @@ const SurveyApp = () => {
   };
 
   const handleUserInfoSubmit = () => {
-    // Just move to survey step, don't create survey record yet
     setStep('survey');
   };
 
@@ -82,7 +83,6 @@ const SurveyApp = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Complete survey - save everything to database
       completeSurvey();
     }
   };
@@ -99,7 +99,6 @@ const SurveyApp = () => {
     try {
       console.log('Creating survey with user info:', userInfo);
       
-      // Create survey record
       const { data: surveyData, error: surveyError } = await supabase
         .from('surveys')
         .insert([{
@@ -119,7 +118,6 @@ const SurveyApp = () => {
       const surveyId = surveyData[0]?.id;
       console.log('Survey created with ID:', surveyId);
 
-      // Save all answers
       const answerInserts = Object.entries(answers).map(([questionId, answer]) => ({
         survey_id: surveyId,
         question_id: parseInt(questionId),
@@ -187,4 +185,15 @@ const SurveyApp = () => {
   );
 };
 
-export default SurveyApp;
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<SurveyApp />} />
+        <Route path="/results" element={<ResultsPage />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
