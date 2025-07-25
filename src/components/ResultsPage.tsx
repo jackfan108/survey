@@ -1,44 +1,8 @@
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { apiClient, ApiError } from '../lib/api-client';
+import type { SurveyResultsData } from '../lib/api-client';
 import { SurveyResultsDisplay } from './SurveyResultsDisplay';
 
-interface SurveyResult {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  created_at: string;
-}
-
-interface QuestionWithAnswer {
-  question_id: number;
-  question_text: string;
-  label_0: string;
-  label_5?: string | null;
-  label_10: string;
-  opinion_score?: number;
-  importance_score?: number;
-}
-
-interface QuestionData {
-  id: number;
-  question_text: string;
-  label_0: string;
-  label_5?: string | null;
-  label_10: string;
-}
-
-interface SupabaseAnswer {
-  question_id: number;
-  opinion_score: number;
-  importance_score: number;
-  questions: QuestionData[] | QuestionData;
-}
-
-interface SurveyResultsData {
-  survey: SurveyResult;
-  questions: QuestionWithAnswer[];
-}
 
 const ResultsPage = () => {
   const [email, setEmail] = useState('');
@@ -46,80 +10,6 @@ const ResultsPage = () => {
   const [message, setMessage] = useState('');
   const [surveyResults, setSurveyResults] = useState<SurveyResultsData | null>(null);
 
-  const fetchSurveyResults = async (email: string): Promise<SurveyResultsData | null> => {
-    const { data: surveyData, error: surveyError } = await supabase
-      .from('surveys')
-      .select('*')
-      .eq('email', email)
-      .single();
-
-    if (surveyError || !surveyData) {
-      throw new Error('No survey found for this email address');
-    }
-
-    const { data: answersData, error: answersError } = await supabase
-      .from('answers')
-      .select(`
-        question_id,
-        opinion_score,
-        importance_score,
-        questions!inner (
-          id,
-          question_text,
-          label_0,
-          label_5,
-          label_10
-        )
-      `)
-      .eq('survey_id', surveyData.id);
-
-    if (answersError) {
-      throw new Error('Error fetching survey answers');
-    }
-
-    if (!answersData || answersData.length === 0) {
-      throw new Error('No answers found for this survey');
-    }
-
-    const questions: QuestionWithAnswer[] = (answersData as SupabaseAnswer[]).map((answer) => {
-      if (!answer.questions) {
-        throw new Error('Invalid data structure: missing questions');
-      }
-
-      if (Array.isArray(answer.questions)) {
-        if (answer.questions.length === 0) {
-          throw new Error('Invalid data structure: empty questions array');
-        }
-        
-        const question = answer.questions[0];
-        return {
-          question_id: answer.question_id,
-          question_text: question.question_text,
-          label_0: question.label_0,
-          label_5: question.label_5,
-          label_10: question.label_10,
-          opinion_score: answer.opinion_score,
-          importance_score: answer.importance_score,
-        };
-      } else {
-        const question = answer.questions as QuestionData;
-        return {
-          question_id: answer.question_id,
-          question_text: question.question_text,
-          label_0: question.label_0,
-          label_5: question.label_5,
-          label_10: question.label_10,
-          opinion_score: answer.opinion_score,
-          importance_score: answer.importance_score,
-        };
-      }
-    });
-
-    return {
-      survey: surveyData,
-      questions: questions,
-    };
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,12 +30,16 @@ const ResultsPage = () => {
     setSurveyResults(null);
 
     try {
-      const results = await fetchSurveyResults(email);
+      const results = await apiClient.getSurveyResults(email);
       setSurveyResults(results);
       setMessage('');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.';
-      setMessage(errorMessage);
+      if (error instanceof ApiError) {
+        setMessage(error.message);
+      } else {
+        const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.';
+        setMessage(errorMessage);
+      }
       setSurveyResults(null);
     } finally {
       setIsLoading(false);

@@ -1,29 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { apiClient, ApiError } from '../lib/api-client';
+import type { UserInfo, Question, Answer } from '../lib/api-client';
 import { UserInfoForm } from './UserInfoForm';
 import { SurveyQuestion } from './SurveyQuestion';
 import { CompletionScreen } from './CompletionScreen';
 
-interface UserInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
-
-interface Question {
-  id: number;
-  question_text: string;
-  label_0: string;
-  label_5?: string | null;
-  label_10: string;
-}
-
-interface Answer {
-  opinion_score?: number;
-  importance_score?: number;
-}
 
 const SurveyApp = () => {
   const [step, setStep] = useState<'user-info' | 'survey' | 'complete'>('user-info');
@@ -43,21 +26,20 @@ const SurveyApp = () => {
 
   const loadQuestions = async () => {
     setLoading(true);
-    
+
     try {
-      const { data, error } = await supabase.from('questions').select('*');
-      
-      if (error) {
-        console.error('Error loading questions:', error);
+      const data = await apiClient.getQuestions();
+      if (process.env.NODE_ENV === 'development') {
+        setQuestions(data.slice(0, 1));
       } else {
-        if (!data || data.length === 0) {
-          console.log('No questions found in database');
-        } else {
-          setQuestions(data);
-        }
+        setQuestions(data);
       }
     } catch (err) {
-      console.error('Failed to load questions:', err);
+      if (err instanceof ApiError) {
+        console.error('Error loading questions:', err.message);
+      } else {
+        console.error('Failed to load questions:', err);
+      }
     }
     setLoading(false);
   };
@@ -99,52 +81,20 @@ const SurveyApp = () => {
     try {
       console.log('Creating survey with user info:', userInfo);
       
-      const { data: surveyData, error: surveyError } = await supabase
-        .from('surveys')
-        .insert([{
-          first_name: userInfo.firstName,
-          last_name: userInfo.lastName,
-          email: userInfo.email
-        }])
-        .select();
-
-      if (surveyError) {
-        console.error('Error creating survey:', surveyError);
-        alert(`Error saving survey: ${surveyError.message}`);
-        setLoading(false);
-        return;
-      }
-
-      const surveyId = surveyData[0]?.id;
-      console.log('Survey created with ID:', surveyId);
-
-      const answerInserts = Object.entries(answers).map(([questionId, answer]) => ({
-        survey_id: surveyId,
-        question_id: parseInt(questionId),
-        opinion_score: answer.opinion_score,
-        importance_score: answer.importance_score
-      }));
-
-      console.log('Inserting answers:', answerInserts);
-
-      const { error: answersError } = await supabase
-        .from('answers')
-        .insert(answerInserts);
-
-      if (answersError) {
-        console.error('Error saving answers:', answersError);
-        alert(`Error saving answers: ${answersError.message}`);
-        setLoading(false);
-        return;
-      }
-
-      console.log('Survey completed successfully');
+      const result = await apiClient.createSurvey(userInfo, answers);
+      
+      console.log('Survey completed successfully:', result);
       setLoading(false);
       setStep('complete');
       
     } catch (err) {
-      console.error('Error completing survey:', err);
-      alert(`Error completing survey: ${err instanceof Error ? err.message : String(err)}`);
+      if (err instanceof ApiError) {
+        console.error('Error completing survey:', err.message);
+        alert(`Error completing survey: ${err.message}`);
+      } else {
+        console.error('Error completing survey:', err);
+        alert(`Error completing survey: ${err instanceof Error ? err.message : String(err)}`);
+      }
       setLoading(false);
     }
   };

@@ -19,7 +19,8 @@
       "Bash(find:*)",
       "Bash(git check-ignore:*)",
       "Bash(yarn tsc:*)",
-      "Bash(yarn run:*)"
+      "Bash(yarn run:*)",
+      "Bash(npm run lint)"
     ],
     "deny": []
   }
