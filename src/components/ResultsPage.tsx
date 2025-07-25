@@ -1,9 +1,87 @@
 import { useState } from 'react';
+import { supabase } from '../lib/supabase';
+import { SurveyResultsDisplay } from './SurveyResultsDisplay';
+
+interface SurveyResult {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  created_at: string;
+}
+
+interface QuestionWithAnswer {
+  question_id: number;
+  question_text: string;
+  label_0: string;
+  label_5?: string | null;
+  label_10: string;
+  opinion_score?: number;
+  importance_score?: number;
+}
+
+interface SurveyResultsData {
+  survey: SurveyResult;
+  questions: QuestionWithAnswer[];
+}
 
 const ResultsPage = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [surveyResults, setSurveyResults] = useState<SurveyResultsData | null>(null);
+
+  const fetchSurveyResults = async (email: string): Promise<SurveyResultsData | null> => {
+    const { data: surveyData, error: surveyError } = await supabase
+      .from('surveys')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    console.log("surveyData", surveyData);
+
+    if (surveyError || !surveyData) {
+      throw new Error('No survey found for this email address');
+    }
+
+    const { data: answersData, error: answersError } = await supabase
+      .from('answers')
+      .select(`
+        question_id,
+        opinion_score,
+        importance_score,
+        questions (
+          id,
+          question_text,
+          label_0,
+          label_5,
+          label_10
+        )
+      `)
+      .eq('survey_id', surveyData.id);
+
+      console.log('jflog answersData', answersData)
+      console.log('jflog answersError', answersError)
+
+    if (answersError) {
+      throw new Error('Error fetching survey answers', answersError);
+    }
+
+const questions: QuestionWithAnswer[] = answersData?.map((answer) => ({
+      question_id: answer.question_id,
+      question_text: answer.questions[0].question_text,
+      label_0: answer.questions[0].label_0,
+      label_5: answer.questions[0].label_5,
+      label_10: answer.questions[0].label_10,
+      opinion_score: answer.opinion_score,
+      importance_score: answer.importance_score,
+    })) || [];
+
+    return {
+      survey: surveyData,
+      questions: questions,
+    };
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,7 +91,6 @@ const ResultsPage = () => {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setMessage('Please enter a valid email address');
@@ -22,16 +99,35 @@ const ResultsPage = () => {
 
     setIsLoading(true);
     setMessage('');
+    setSurveyResults(null);
 
     try {
-      // TODO: Add logic to fetch and display analysis results
-      setMessage('Analysis will be available soon!');
-    } catch {
-      setMessage('An error occurred. Please try again.');
+      const results = await fetchSurveyResults(email);
+      setSurveyResults(results);
+      setMessage('');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.';
+      setMessage(errorMessage);
+      setSurveyResults(null);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleBackToSearch = () => {
+    setSurveyResults(null);
+    setEmail('');
+    setMessage('');
+  };
+
+  if (surveyResults) {
+    return (
+      <SurveyResultsDisplay 
+        surveyResults={surveyResults} 
+        onBackToSearch={handleBackToSearch}
+      />
+    );
+  }
 
   return (
     <div className="h-full w-full flex items-center justify-center p-4 sm:p-6 md:p-8">
@@ -70,7 +166,7 @@ const ResultsPage = () => {
           </button>
 
           {message && (
-            <div className={`text-center text-sm ${message.includes('error') || message.includes('Please') ? 'text-red-300' : 'text-green-300'}`}>
+            <div className={`text-center text-sm ${message.includes('No survey found') || message.includes('Please') || message.includes('Error') ? 'text-red-300' : 'text-green-300'}`}>
               {message}
             </div>
           )}

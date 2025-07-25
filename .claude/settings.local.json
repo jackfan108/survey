@@ -15,7 +15,9 @@
       "Bash(cp:*)",
       "Bash(mv:*)",
       "Bash(timeout 10s npm run dev)",
-      "Bash(true)"
+      "Bash(true)",
+      "Bash(find:*)",
+      "Bash(git check-ignore:*)"
     ],
     "deny": []
   }
