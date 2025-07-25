@@ -20,6 +20,21 @@ interface QuestionWithAnswer {
   importance_score?: number;
 }
 
+interface QuestionData {
+  id: number;
+  question_text: string;
+  label_0: string;
+  label_5?: string | null;
+  label_10: string;
+}
+
+interface SupabaseAnswer {
+  question_id: number;
+  opinion_score: number;
+  importance_score: number;
+  questions: QuestionData[] | QuestionData;
+}
+
 interface SurveyResultsData {
   survey: SurveyResult;
   questions: QuestionWithAnswer[];
@@ -38,8 +53,6 @@ const ResultsPage = () => {
       .eq('email', email)
       .single();
 
-    console.log("surveyData", surveyData);
-
     if (surveyError || !surveyData) {
       throw new Error('No survey found for this email address');
     }
@@ -50,7 +63,7 @@ const ResultsPage = () => {
         question_id,
         opinion_score,
         importance_score,
-        questions (
+        questions!inner (
           id,
           question_text,
           label_0,
@@ -60,22 +73,47 @@ const ResultsPage = () => {
       `)
       .eq('survey_id', surveyData.id);
 
-      console.log('jflog answersData', answersData)
-      console.log('jflog answersError', answersError)
-
     if (answersError) {
-      throw new Error('Error fetching survey answers', answersError);
+      throw new Error('Error fetching survey answers');
     }
 
-const questions: QuestionWithAnswer[] = answersData?.map((answer) => ({
-      question_id: answer.question_id,
-      question_text: answer.questions[0].question_text,
-      label_0: answer.questions[0].label_0,
-      label_5: answer.questions[0].label_5,
-      label_10: answer.questions[0].label_10,
-      opinion_score: answer.opinion_score,
-      importance_score: answer.importance_score,
-    })) || [];
+    if (!answersData || answersData.length === 0) {
+      throw new Error('No answers found for this survey');
+    }
+
+    const questions: QuestionWithAnswer[] = (answersData as SupabaseAnswer[]).map((answer) => {
+      if (!answer.questions) {
+        throw new Error('Invalid data structure: missing questions');
+      }
+
+      if (Array.isArray(answer.questions)) {
+        if (answer.questions.length === 0) {
+          throw new Error('Invalid data structure: empty questions array');
+        }
+        
+        const question = answer.questions[0];
+        return {
+          question_id: answer.question_id,
+          question_text: question.question_text,
+          label_0: question.label_0,
+          label_5: question.label_5,
+          label_10: question.label_10,
+          opinion_score: answer.opinion_score,
+          importance_score: answer.importance_score,
+        };
+      } else {
+        const question = answer.questions as QuestionData;
+        return {
+          question_id: answer.question_id,
+          question_text: question.question_text,
+          label_0: question.label_0,
+          label_5: question.label_5,
+          label_10: question.label_10,
+          opinion_score: answer.opinion_score,
+          importance_score: answer.importance_score,
+        };
+      }
+    });
 
     return {
       survey: surveyData,

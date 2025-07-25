@@ -17,7 +17,9 @@
       "Bash(timeout 10s npm run dev)",
       "Bash(true)",
       "Bash(find:*)",
-      "Bash(git check-ignore:*)"
+      "Bash(git check-ignore:*)",
+      "Bash(yarn tsc:*)",
+      "Bash(yarn run:*)"
     ],
     "deny": []
   }

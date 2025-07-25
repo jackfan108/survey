@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Check } from 'lucide-react';
+import Image from 'next/image';
 
 export const CompletionScreen: React.FC = () => {
   const [gifUrl, setGifUrl] = useState<string>('');
@@ -44,10 +45,13 @@ export const CompletionScreen: React.FC = () => {
               <div className="w-6 h-6 sm:w-8 sm:h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
             </div>
           ) : gifUrl ? (
-            <img 
+            <Image 
               src={gifUrl}
               alt="Random political meme"
+              width={400}
+              height={256}
               className="w-full h-48 sm:h-64 object-contain rounded-lg bg-gray-900"
+              unoptimized
             />
           ) : (
             <div className="w-full h-48 sm:h-64 bg-gray-700 rounded-lg flex items-center justify-center">
