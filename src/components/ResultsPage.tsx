@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { apiClient, ApiError } from '../lib/api-client';
-import type { SurveyResultsData } from '../lib/api-client';
+import type { SurveyResultsData, TagAnalysis } from '../lib/api-client';
 import { SurveyResultsDisplay } from './SurveyResultsDisplay';
 
 
@@ -9,6 +9,7 @@ const ResultsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [surveyResults, setSurveyResults] = useState<SurveyResultsData | null>(null);
+  const [tagAnalysis, setTagAnalysis] = useState<TagAnalysis[] | null>(null);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,8 +31,12 @@ const ResultsPage = () => {
     setSurveyResults(null);
 
     try {
-      const results = await apiClient.getSurveyResults(email);
+      const [results, tags] = await Promise.all([
+        apiClient.getSurveyResults(email),
+        apiClient.getTagAnalysis(email)
+      ]);
       setSurveyResults(results);
+      setTagAnalysis(tags);
       setMessage('');
     } catch (error) {
       if (error instanceof ApiError) {
@@ -41,6 +46,7 @@ const ResultsPage = () => {
         setMessage(errorMessage);
       }
       setSurveyResults(null);
+      setTagAnalysis(null);
     } finally {
       setIsLoading(false);
     }
@@ -48,6 +54,7 @@ const ResultsPage = () => {
 
   const handleBackToSearch = () => {
     setSurveyResults(null);
+    setTagAnalysis(null);
     setEmail('');
     setMessage('');
   };
@@ -55,7 +62,8 @@ const ResultsPage = () => {
   if (surveyResults) {
     return (
       <SurveyResultsDisplay 
-        surveyResults={surveyResults} 
+        surveyResults={surveyResults}
+        tagAnalysis={tagAnalysis || []}
         onBackToSearch={handleBackToSearch}
       />
     );

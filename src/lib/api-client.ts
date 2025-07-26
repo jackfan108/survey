@@ -40,6 +40,14 @@ interface SurveyResultsData {
   questions: QuestionWithAnswer[];
 }
 
+interface TagAnalysis {
+  tag_id: number;
+  tag_name: string;
+  question_count: number;
+  question_ids: number[];
+  weighted_average: number;
+}
+
 class ApiError extends Error {
   constructor(message: string, public status: number) {
     super(message);
@@ -78,7 +86,13 @@ export const apiClient = {
     const result = await handleResponse<{ data: SurveyResultsData }>(response);
     return result.data;
   },
+
+  async getTagAnalysis(email: string): Promise<TagAnalysis[]> {
+    const response = await fetch(`/api/surveys/tags?email=${encodeURIComponent(email)}`);
+    const result = await handleResponse<{ data: TagAnalysis[] }>(response);
+    return result.data;
+  },
 };
 
 export { ApiError };
-export type { UserInfo, Question, Answer, SurveyResult, QuestionWithAnswer, SurveyResultsData };
+export type { UserInfo, Question, Answer, SurveyResult, QuestionWithAnswer, SurveyResultsData, TagAnalysis };
