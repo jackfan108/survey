@@ -1,28 +1,38 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { apiClient, ApiError } from '../lib/api-client';
 import type { SurveyResultsData, TagAnalysis } from '../lib/api-client';
 import { SurveyResultsDisplay } from './SurveyResultsDisplay';
+import { appCache } from '../lib/cache';
 
 
 const ResultsPage = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [surveyResults, setSurveyResults] = useState<SurveyResultsData | null>(null);
   const [tagAnalysis, setTagAnalysis] = useState<TagAnalysis[] | null>(null);
 
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email) {
-      setMessage('Please enter your email address');
-      return;
+  // Check cache on component mount
+  useEffect(() => {
+    const cached = appCache.get();
+    if (cached) {
+      setSurveyResults(cached.surveyResults);
+      setTagAnalysis(cached.tagAnalysis);
+      setEmail(cached.surveyResults.survey.email);
     }
+  }, []);
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setMessage('Please enter a valid email address');
+  const loadResults = async (emailAddress: string) => {
+    // Check cache first
+    const cached = appCache.get();
+    if (cached && cached.surveyResults.survey.email === emailAddress) {
+      setSurveyResults(cached.surveyResults);
+      setTagAnalysis(cached.tagAnalysis);
+      setMessage('');
       return;
     }
 
@@ -32,9 +42,13 @@ const ResultsPage = () => {
 
     try {
       const [results, tags] = await Promise.all([
-        apiClient.getSurveyResults(email),
-        apiClient.getTagAnalysis(email)
+        apiClient.getSurveyResults(emailAddress),
+        apiClient.getTagAnalysis(emailAddress)
       ]);
+      
+      // Cache the results
+      appCache.set(results, tags);
+      
       setSurveyResults(results);
       setTagAnalysis(tags);
       setMessage('');
@@ -52,11 +66,31 @@ const ResultsPage = () => {
     }
   };
 
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) {
+      setMessage('Please enter your email address');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage('Please enter a valid email address');
+      return;
+    }
+
+    await loadResults(email);
+  };
+
   const handleBackToSearch = () => {
     setSurveyResults(null);
     setTagAnalysis(null);
     setEmail('');
     setMessage('');
+    // Clear cache when going back to search
+    appCache.clear();
   };
 
   if (surveyResults) {

@@ -22,12 +22,12 @@ interface SurveyResultsData {
 }
 
 import { TagAnalysis } from './TagAnalysis';
+import { QuestionCard } from './QuestionCard';
 import { 
   calculateAverageOpinionScore, 
   calculateWeightedOpinionScore, 
   calculateStandardDeviation,
-  createQuestionToTagsMapping,
-  getTagColor
+  createQuestionToTagsMapping
 } from '../lib/utils/surveyCalculations';
 
 interface TagAnalysisData {
@@ -155,67 +155,17 @@ export const SurveyResultsDisplay: React.FC<SurveyResultsDisplayProps> = ({
         </div>
 
         {/* Tag Analysis */}
-        <TagAnalysis tagAnalysis={tagAnalysis} />
+        <TagAnalysis tagAnalysis={tagAnalysis} userEmail={surveyResults.survey.email} />
 
         <div className="space-y-4">
           {surveyResults.questions.map((question, index) => (
-            <div key={question.question_id} className="bg-white/10 backdrop-blur-sm rounded-lg shadow-lg border border-white/20 p-6">
-              <h3 className="text-white font-semibold text-lg mb-3">
-                Question {index + 1}: {question.question_text}
-              </h3>
-              
-              {/* Tags for this question */}
-              {questionToTags[question.question_id] && (
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-2">
-                    {questionToTags[question.question_id].map((tagName) => (
-                      <span
-                        key={tagName}
-                        className={`inline-block px-2 py-1 text-xs font-medium rounded-full border ${getTagColor(tagName)}`}
-                      >
-                        {tagName}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white/5 rounded-lg p-4">
-                  <h4 className="text-white/80 font-medium mb-2">Opinion Score</h4>
-                  <div className="flex items-center justify-between text-sm text-white/60 mb-2">
-                    <span>{question.label_0}</span>
-                    <span>{question.label_10}</span>
-                  </div>
-                  <div className="bg-white/20 rounded-full h-2 mb-2">
-                    <div 
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
-                      style={{ width: `${((question.opinion_score || 0) / 9) * 100}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-white text-center font-semibold">
-                    {question.opinion_score}/9
-                  </p>
-                </div>
-
-                <div className="bg-white/5 rounded-lg p-4">
-                  <h4 className="text-white/80 font-medium mb-2">Importance Score</h4>
-                  <div className="flex items-center justify-between text-sm text-white/60 mb-2">
-                    <span>Not Important</span>
-                    <span>Very Important</span>
-                  </div>
-                  <div className="bg-white/20 rounded-full h-2 mb-2">
-                    <div 
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
-                      style={{ width: `${((question.importance_score || 0) / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-white text-center font-semibold">
-                    {question.importance_score}/5
-                  </p>
-                </div>
-              </div>
-            </div>
+            <QuestionCard
+              key={question.question_id}
+              question={question}
+              index={index}
+              questionToTags={questionToTags}
+              showTags={true}
+            />
           ))}
         </div>
       </div>
