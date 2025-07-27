@@ -23,6 +23,7 @@ interface SurveyResultsData {
 
 import { TagAnalysis } from './TagAnalysis';
 import { QuestionCard } from './QuestionCard';
+import { OpinionDistribution } from './OpinionDistribution';
 import { 
   calculateAverageOpinionScore, 
   calculateWeightedOpinionScore, 
@@ -153,6 +154,9 @@ export const SurveyResultsDisplay: React.FC<SurveyResultsDisplayProps> = ({
           </div>
         </div>
         </div>
+
+        {/* Opinion Distribution */}
+        <OpinionDistribution questions={surveyResults.questions} />
 
         {/* Tag Analysis */}
         <TagAnalysis tagAnalysis={tagAnalysis} userEmail={surveyResults.survey.email} />

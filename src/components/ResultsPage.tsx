@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { apiClient, ApiError } from '../lib/api-client';
 import type { SurveyResultsData, TagAnalysis } from '../lib/api-client';
 import { SurveyResultsDisplay } from './SurveyResultsDisplay';
@@ -9,7 +8,6 @@ import { appCache } from '../lib/cache';
 
 
 const ResultsPage = () => {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');

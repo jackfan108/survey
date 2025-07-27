@@ -13,7 +13,7 @@ interface TagAnalysisProps {
   userEmail?: string;
 }
 
-export const TagAnalysis: React.FC<TagAnalysisProps> = ({ tagAnalysis, userEmail }) => {
+export const TagAnalysis: React.FC<TagAnalysisProps> = ({ tagAnalysis }) => {
   const router = useRouter();
   
   if (tagAnalysis.length === 0) {
