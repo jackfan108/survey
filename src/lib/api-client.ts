@@ -48,6 +48,41 @@ interface TagAnalysis {
   weighted_average: number;
 }
 
+interface OpinionDistribution extends Record<string | number, number> {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+  6: number;
+  7: number;
+  8: number;
+  9: number;
+}
+
+interface ImportanceDistribution extends Record<string | number, number> {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+}
+
+interface QuestionAnalysis {
+  question_id: number;
+  question_text: string;
+  label_0: string;
+  label_5?: string | null;
+  label_10: string;
+  total_responses: number;
+  opinion_distribution: OpinionDistribution;
+  importance_distribution: ImportanceDistribution;
+  opinion_std_deviation: number;
+  opinion_mean: number;
+  importance_mean: number;
+  weighted_opinion_score: number;
+}
+
 class ApiError extends Error {
   constructor(message: string, public status: number) {
     super(message);
@@ -92,7 +127,13 @@ export const apiClient = {
     const result = await handleResponse<{ data: TagAnalysis[] }>(response);
     return result.data;
   },
+
+  async getQuestionAnalysis(): Promise<QuestionAnalysis[]> {
+    const response = await fetch('/api/surveys/analysis');
+    const result = await handleResponse<{ data: QuestionAnalysis[] }>(response);
+    return result.data;
+  },
 };
 
 export { ApiError };
-export type { UserInfo, Question, Answer, SurveyResult, QuestionWithAnswer, SurveyResultsData, TagAnalysis };
+export type { UserInfo, Question, Answer, SurveyResult, QuestionWithAnswer, SurveyResultsData, TagAnalysis, QuestionAnalysis, OpinionDistribution, ImportanceDistribution };

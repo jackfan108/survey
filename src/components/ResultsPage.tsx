@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { apiClient, ApiError } from '../lib/api-client';
 import type { SurveyResultsData, TagAnalysis } from '../lib/api-client';
 import { SurveyResultsDisplay } from './SurveyResultsDisplay';
@@ -8,6 +9,7 @@ import { appCache } from '../lib/cache';
 
 
 const ResultsPage = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -143,6 +145,20 @@ const ResultsPage = () => {
             </div>
           )}
         </form>
+
+        <div className="mt-6 pt-6 border-t border-white/20">
+          <div className="text-center">
+            <p className="text-white/60 text-sm mb-3">
+              Or explore overall survey trends
+            </p>
+            <button
+              onClick={() => router.push('/analysis')}
+              className="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-md border border-white/20 hover:border-white/30 transition-all"
+            >
+              View Aggregate Analysis
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

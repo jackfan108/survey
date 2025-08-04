@@ -13,6 +13,7 @@ interface UserInfoFormProps {
   onSubmit: () => void;
   loading: boolean;
   onViewResults: () => void;
+  onViewAnalysis?: () => void;
 }
 
 export const UserInfoForm: React.FC<UserInfoFormProps> = ({
@@ -20,7 +21,8 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
   setUserInfo,
   onSubmit,
   loading,
-  onViewResults
+  onViewResults,
+  onViewAnalysis
 }) => {
   const handleSubmit = () => {
     const validateEmail = (email: string) => {
@@ -104,13 +106,21 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
             )}
           </button>
           
-          <div className="text-center mt-4">
+          <div className="text-center mt-4 space-y-2">
             <button
               onClick={onViewResults}
-              className="text-gray-300 hover:text-white text-sm transition-colors underline"
+              className="block text-gray-300 hover:text-white text-sm transition-colors underline"
             >
               Already took the survey? Click to see results
             </button>
+            {onViewAnalysis && (
+              <button
+                onClick={onViewAnalysis}
+                className="block text-gray-300 hover:text-white text-sm transition-colors underline"
+              >
+                View aggregate survey analysis
+              </button>
+            )}
           </div>
         </div>
       </div>
