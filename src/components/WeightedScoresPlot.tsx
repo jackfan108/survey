@@ -70,7 +70,7 @@ export const WeightedScoresPlot: React.FC<WeightedScoresPlotProps> = ({ scores }
                     {/* Tooltip */}
                     <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
                       <div className="bg-black/90 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
-                        Survey #{score.survey_id}: {score.weighted_opinion_score.toFixed(2)}
+                        {score.first_name}{score.last_name ? ` ${score.last_name.charAt(0)}` : ''}: {score.weighted_opinion_score.toFixed(2)}
                       </div>
                       <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black/90"></div>
                     </div>
@@ -97,7 +97,7 @@ export const WeightedScoresPlot: React.FC<WeightedScoresPlotProps> = ({ scores }
                   key={score.survey_id}
                   className="text-xs bg-white/10 text-gray-300 px-2 py-1 rounded border border-white/20"
                 >
-                  #{score.survey_id}: {score.weighted_opinion_score.toFixed(2)}
+                  {score.first_name}{score.last_name ? ` ${score.last_name.charAt(0)}` : ''}: {score.weighted_opinion_score.toFixed(2)}
                 </span>
               ))}
             </div>

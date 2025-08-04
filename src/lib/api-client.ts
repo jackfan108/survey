@@ -86,6 +86,8 @@ interface QuestionAnalysis {
 
 interface SurveyWeightedScore {
   survey_id: number;
+  first_name: string;
+  last_name: string;
   weighted_opinion_score: number;
 }
 

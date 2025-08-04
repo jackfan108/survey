@@ -90,7 +90,7 @@ export const SurveyResultsDisplay: React.FC<SurveyResultsDisplayProps> = ({
             </h2>
             <div className="text-center">
               <div className="text-4xl font-bold text-white mb-2">
-                {averageScore.toFixed(1)}/9
+                {averageScore.toFixed(2)}/9
               </div>
               <div className="bg-white/20 rounded-full h-4 mb-4 mx-auto max-w-xs">
                 <div 
@@ -111,7 +111,7 @@ export const SurveyResultsDisplay: React.FC<SurveyResultsDisplayProps> = ({
             </h2>
             <div className="text-center">
               <div className="text-4xl font-bold text-white mb-2">
-                {weightedScore.toFixed(1)}/9
+                {weightedScore.toFixed(2)}/9
               </div>
               <div className="bg-white/20 rounded-full h-4 mb-4 mx-auto max-w-xs">
                 <div 
