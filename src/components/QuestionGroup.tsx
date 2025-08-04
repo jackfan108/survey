@@ -20,36 +20,36 @@ export const QuestionGroup: React.FC<QuestionGroupProps> = ({
   }
 
   return (
-    <div className={`bg-white/5 backdrop-blur-sm rounded-2xl border border-white/20 p-6 sm:p-8 ${className}`}>
-      <div className="sticky top-4 bg-gradient-to-br from-slate-900/80 via-purple-900/85 to-slate-900/80 backdrop-blur-md rounded-xl border border-white/20 shadow-lg p-4 mb-8 z-10">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white text-center">
+    <div className={`bg-white/5 backdrop-blur-sm rounded-2xl border border-white/20 p-3 sm:p-6 lg:p-8 mx-2 sm:mx-0 ${className}`}>
+      <div className="sticky top-2 sm:top-4 bg-gradient-to-br from-slate-900/80 via-purple-900/85 to-slate-900/80 backdrop-blur-md rounded-xl border border-white/20 shadow-lg p-3 sm:p-4 mb-6 sm:mb-8 z-10">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white text-center leading-tight">
           {title}
         </h2>
       </div>
 
-      <div className="space-y-12">
+      <div className="space-y-6 sm:space-y-8 lg:space-y-12">
         {questions.map((question, index) => (
-          <div key={question.question_id} className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6">
+          <div key={question.question_id} className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-3 sm:p-4 lg:p-6">
             {/* Question Header */}
-            <div className="mb-6">
-              <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2">
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 leading-tight">
                 Question {index + 1}: {question.question_text}
               </h3>
-              <div className="flex flex-wrap gap-4 text-sm text-gray-300">
-                <span>Total responses: {question.total_responses}</span>
+              <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-300">
+                <span className="bg-white/5 px-2 py-1 rounded border border-white/10">Total responses: {question.total_responses}</span>
                 {showStats && (
                   <>
-                    <span>Opinion Mean: {question.opinion_mean.toFixed(2)}</span>
-                    <span>Importance Mean: {question.importance_mean.toFixed(2)}</span>
-                    <span>Weighted Score: {question.weighted_opinion_score.toFixed(2)}</span>
-                    <span>Opinion Std Dev: {question.opinion_std_deviation.toFixed(2)}</span>
+                    <span className="bg-white/5 px-2 py-1 rounded border border-white/10">Opinion Mean: {question.opinion_mean.toFixed(2)}</span>
+                    <span className="bg-white/5 px-2 py-1 rounded border border-white/10">Importance Mean: {question.importance_mean.toFixed(2)}</span>
+                    <span className="bg-white/5 px-2 py-1 rounded border border-white/10">Weighted Score: {question.weighted_opinion_score.toFixed(2)}</span>
+                    <span className="bg-white/5 px-2 py-1 rounded border border-white/10">Opinion Std Dev: {question.opinion_std_deviation.toFixed(2)}</span>
                   </>
                 )}
               </div>
             </div>
 
             {/* Histogram Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Opinion Score Histogram */}
               <div>
                 <Histogram

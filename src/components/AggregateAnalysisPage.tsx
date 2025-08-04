@@ -80,27 +80,27 @@ export const AggregateAnalysisPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-2 sm:p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Navigation Header */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6 px-2">
           <button
             onClick={() => router.push('/results')}
-            className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors"
+            className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors text-sm sm:text-base"
           >
             <ChevronLeft size={20} />
             <span>Back to Results</span>
           </button>
         </div>
 
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 px-2">
             Aggregate Survey Analysis
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-gray-300 text-base sm:text-lg px-2">
             Distribution of responses across all questions
           </p>
-          <p className="text-gray-400 text-sm mt-2">
+          <p className="text-gray-400 text-sm mt-2 px-2">
             Total questions analyzed: {analysisData.length}
           </p>
         </div>
@@ -117,7 +117,7 @@ export const AggregateAnalysisPage: React.FC = () => {
             .slice(0, 3)
           }
           showStats={true}
-          className="mb-16"
+          className="mb-8 sm:mb-12 lg:mb-16"
         />
 
         {/* Most Consensus Questions */}
@@ -129,7 +129,7 @@ export const AggregateAnalysisPage: React.FC = () => {
             .slice(0, 3)
           }
           showStats={true}
-          className="mb-16"
+          className="mb-8 sm:mb-12 lg:mb-16"
         />
 
         {/* Most Important Questions */}
@@ -141,7 +141,7 @@ export const AggregateAnalysisPage: React.FC = () => {
             .slice(0, 3)
           }
           showStats={true}
-          className="mb-16"
+          className="mb-8 sm:mb-12 lg:mb-16"
         />
 
         {/* Least Important Questions */}
@@ -153,7 +153,7 @@ export const AggregateAnalysisPage: React.FC = () => {
             .slice(0, 3)
           }
           showStats={true}
-          className="mb-16"
+          className="mb-8 sm:mb-12 lg:mb-16"
         />
 
         {/* Most Liberal Questions */}
@@ -165,7 +165,7 @@ export const AggregateAnalysisPage: React.FC = () => {
             .slice(0, 3)
           }
           showStats={true}
-          className="mb-16"
+          className="mb-8 sm:mb-12 lg:mb-16"
         />
 
         {/* Most Conservative Questions */}
@@ -177,14 +177,14 @@ export const AggregateAnalysisPage: React.FC = () => {
             .slice(0, 3)
           }
           showStats={true}
-          className="mb-16"
+          className="mb-8 sm:mb-12 lg:mb-16"
         />
 
         {/* View All Questions Button */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16 px-2">
           <button
             onClick={() => router.push('/analysis/allQuestions')}
-            className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl border border-white/20 hover:border-white/30 transition-all font-medium text-lg"
+            className="bg-white/10 hover:bg-white/20 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl border border-white/20 hover:border-white/30 transition-all font-medium text-base sm:text-lg w-full sm:w-auto"
           >
             View All Questions
           </button>

@@ -28,24 +28,24 @@ export const Histogram: React.FC<HistogramProps> = ({
   const safeMaxValue = actualMaxValue === 0 ? 1 : actualMaxValue;
 
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-4">
-      <h3 className="text-white font-semibold text-lg mb-4 text-center">{title}</h3>
+    <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-3 sm:p-4">
+      <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 text-center">{title}</h3>
       
       <div className="relative">
         
         {/* Chart area */}
-        <div className="mx-2">
+        <div className="mx-1 sm:mx-2">
           {/* Chart area */}
-          <div className="flex items-end justify-between mb-2 h-32 relative">
+          <div className="flex items-end justify-between mb-2 h-24 sm:h-32 relative">
             
             {/* Bars */}
             {entries.map(([key, value]) => (
-              <div key={key} className="flex flex-col items-center flex-1 mx-1">
+              <div key={key} className="flex flex-col items-center flex-1 mx-0.5 sm:mx-1">
                 <div className="relative w-full flex justify-center">
                   <div
-                    className={`${color} rounded-t-sm transition-all duration-300 hover:opacity-80 w-8 max-w-full`}
+                    className={`${color} rounded-t-sm transition-all duration-300 hover:opacity-80 w-6 sm:w-8 max-w-full`}
                     style={{
-                      height: `${(value / safeMaxValue) * 128}px`, // 128px = h-32
+                      height: `${(value / safeMaxValue) * 96}px`,
                     }}
                   />
                   {/* Value label on top of bar */}
