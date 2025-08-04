@@ -113,12 +113,12 @@ export const AggregateAnalysisPage: React.FC = () => {
           title="Most Controversial"
           questions={analysisData
             .slice()
-            .sort((a, b) => b.opinion_std_deviation - a.opinion_std_deviation)
+            .sort((a, b) => b.controversy_score - a.controversy_score)
             .slice(0, 3)
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
-          highlightMetric="std_deviation"
+          highlightMetric="controversy_score"
         />
 
         {/* Most Consensus Questions */}
@@ -126,12 +126,12 @@ export const AggregateAnalysisPage: React.FC = () => {
           title="Most Consensus"
           questions={analysisData
             .slice()
-            .sort((a, b) => a.opinion_std_deviation - b.opinion_std_deviation)
+            .sort((a, b) => a.controversy_score - b.controversy_score)
             .slice(0, 3)
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
-          highlightMetric="std_deviation"
+          highlightMetric="controversy_score"
         />
 
         {/* Most Important Questions */}

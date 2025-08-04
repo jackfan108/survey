@@ -81,6 +81,7 @@ interface QuestionAnalysis {
   opinion_mean: number;
   importance_mean: number;
   weighted_opinion_score: number;
+  controversy_score: number;
 }
 
 interface SurveyWeightedScore {

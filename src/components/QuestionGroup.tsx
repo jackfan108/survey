@@ -1,5 +1,6 @@
 import React from 'react';
 import { Histogram } from './Histogram';
+import { PortalTooltip } from './PortalTooltip';
 import type { QuestionAnalysis } from '../lib/api-client';
 
 interface QuestionGroupProps {
@@ -7,7 +8,7 @@ interface QuestionGroupProps {
   questions: QuestionAnalysis[];
   showStats?: boolean;
   className?: string;
-  highlightMetric?: 'std_deviation' | 'importance' | 'weighted_score';
+  highlightMetric?: 'std_deviation' | 'importance' | 'weighted_score' | 'controversy_score';
 }
 
 export const QuestionGroup: React.FC<QuestionGroupProps> = ({
@@ -23,7 +24,7 @@ export const QuestionGroup: React.FC<QuestionGroupProps> = ({
 
   return (
     <div className={`p-3 sm:p-6 lg:p-8 mx-2 sm:mx-0 ${className}`}>
-      <div className="sticky top-2 sm:top-4 bg-gradient-to-br from-slate-900/80 via-purple-900/85 to-slate-900/80 backdrop-blur-md rounded-xl border border-white/20 shadow-lg p-3 sm:p-4 mb-6 sm:mb-8 z-10">
+      <div className="sticky top-2 sm:top-4 bg-gradient-to-br from-slate-900/80 via-purple-900/85 to-slate-900/80 backdrop-blur-md rounded-xl border border-white/20 shadow-lg p-3 sm:p-4 mb-6 sm:mb-8 z-[9998]">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white text-center leading-tight">
           {title}
         </h2>
@@ -38,25 +39,115 @@ export const QuestionGroup: React.FC<QuestionGroupProps> = ({
                 Question {index + 1}: {question.question_text}
               </h3>
               <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-300">
-                <span className="bg-white/5 px-2 py-1 rounded">Total responses: {question.total_responses}</span>
                 {showStats && (
                   <>
-                    <span className="bg-white/5 px-2 py-1 rounded">Opinion Mean: {question.opinion_mean.toFixed(2)}</span>
-                    <span className={`px-2 py-1 rounded ${
-                      highlightMetric === 'importance' 
-                        ? 'bg-green-500/30 text-green-100 font-semibold' 
-                        : 'bg-white/5'
-                    }`}>Importance Mean: {question.importance_mean.toFixed(2)}</span>
-                    <span className={`px-2 py-1 rounded ${
-                      highlightMetric === 'weighted_score' 
-                        ? 'bg-yellow-500/40 text-yellow-100 font-semibold' 
-                        : 'bg-white/5'
-                    }`}>Weighted Score: {question.weighted_opinion_score.toFixed(2)}</span>
-                    <span className={`px-2 py-1 rounded ${
-                      highlightMetric === 'std_deviation' 
-                        ? 'bg-orange-500/30 text-orange-100 font-semibold' 
-                        : 'bg-white/5'
-                    }`}>Opinion Std Dev: {question.opinion_std_deviation.toFixed(2)}</span>
+                    <PortalTooltip
+                      className="bg-white/5 px-2 py-1 rounded"
+                      content={
+                        <>
+                          <div className="font-semibold mb-1">Opinion Mean Formula:</div>
+                          <div className="font-mono text-center">
+                            μ<sub>opinion</sub> = (Σx<sub>i</sub>) / N
+                          </div>
+                          <div className="text-gray-300 text-xs mt-1 text-center">
+                            Sum of all opinion scores ÷ total responses
+                          </div>
+                        </>
+                      }
+                    >
+                      Opinion Mean: {question.opinion_mean.toFixed(2)}
+                    </PortalTooltip>
+                    <PortalTooltip
+                      className={`px-2 py-1 rounded ${
+                        highlightMetric === 'importance' 
+                          ? 'bg-green-500/30 text-green-100 font-semibold' 
+                          : 'bg-white/5'
+                      }`}
+                      content={
+                        <>
+                          <div className="font-semibold mb-1">Importance Mean Formula:</div>
+                          <div className="font-mono text-center">
+                            μ<sub>importance</sub> = (Σy<sub>i</sub>) / N
+                          </div>
+                          <div className="text-gray-300 text-xs mt-1 text-center">
+                            Sum of all importance scores ÷ total responses
+                          </div>
+                        </>
+                      }
+                    >
+                      Importance Mean: {question.importance_mean.toFixed(2)}
+                    </PortalTooltip>
+                    <PortalTooltip
+                      className={`px-2 py-1 rounded ${
+                        highlightMetric === 'weighted_score' 
+                          ? 'bg-yellow-500/40 text-yellow-100 font-semibold' 
+                          : 'bg-white/5'
+                      }`}
+                      content={
+                        <>
+                          <div className="font-semibold mb-1">Weighted Score Formula:</div>
+                          <div className="font-mono text-center">
+                            W = (Σ(x<sub>i</sub> × y<sub>i</sub>)) / (Σy<sub>i</sub>)
+                          </div>
+                          <div className="text-gray-300 text-xs mt-1 text-center">
+                            Sum of (opinion × importance) ÷ sum of importance
+                          </div>
+                        </>
+                      }
+                    >
+                      Weighted Score: {question.weighted_opinion_score.toFixed(2)}
+                    </PortalTooltip>
+                    <PortalTooltip
+                      className={`px-2 py-1 rounded ${
+                        highlightMetric === 'std_deviation' 
+                          ? 'bg-orange-500/30 text-orange-100 font-semibold' 
+                          : 'bg-white/5'
+                      }`}
+                      content={
+                        <>
+                          <div className="font-semibold mb-1">Standard Deviation Formula:</div>
+                          <div className="font-mono text-center">
+                            σ = √[(Σ(x<sub>i</sub> - μ)²) / N]
+                          </div>
+                          <div className="text-gray-300 text-xs mt-1 text-center">
+                            Square root of average squared deviations from mean
+                          </div>
+                        </>
+                      }
+                    >
+                      Opinion Std Dev: {question.opinion_std_deviation.toFixed(2)}
+                    </PortalTooltip>
+                    <PortalTooltip
+                      className={`px-2 py-1 rounded ${
+                        highlightMetric === 'controversy_score' 
+                          ? 'bg-red-500/30 text-red-100 font-semibold' 
+                          : 'bg-white/5'
+                      }`}
+                      content={
+                        <>
+                          <div className="font-semibold mb-2 text-center">Controversy Score Formula:</div>
+                          <div className="space-y-2 font-mono text-center">
+                            <div>
+                              Polarization = <span className="text-blue-200">count(x ≤ 3) + count(x ≥ 7)</span> / N
+                            </div>
+                            <div>
+                              Separation = <span className="text-green-200">|μ<sub>liberal</sub> - μ<sub>conservative</sub>|</span> / 8
+                            </div>
+                            <div>
+                              Balance = 2 × <span className="text-purple-200">min(n<sub>lib</sub>, n<sub>cons</sub>)</span> / (n<sub>lib</sub> + n<sub>cons</sub>)
+                            </div>
+                            <div>
+                              <strong>C = Separation × Balance × (μ<sub>importance</sub> / 5)</strong>
+                            </div>
+                          </div>
+                          <div className="text-gray-300 text-xs mt-2 text-center border-t border-gray-600 pt-1">
+                            Fallback: C = (σ/3) × (μ<sub>importance</sub>/5) × 0.1
+                          </div>
+                        </>
+                      }
+                    >
+                      Controversy Score: {question.controversy_score.toFixed(3)}
+                    </PortalTooltip>
                   </>
                 )}
               </div>
@@ -89,6 +180,7 @@ export const QuestionGroup: React.FC<QuestionGroupProps> = ({
           </div>
         ))}
       </div>
+
     </div>
   );
 };

@@ -52,6 +52,7 @@ interface QuestionAnalysis {
   opinion_mean: number;
   importance_mean: number;
   weighted_opinion_score: number;
+  controversy_score: number;
 }
 
 export async function GET() {
@@ -157,6 +158,44 @@ export async function GET() {
       
       const weightedOpinionScore = totalWeight > 0 ? weightedSum / totalWeight : 0;
 
+      // Calculate controversy score
+      // Step 1: Split responses into liberal (<=3) and conservative (>=7) groups
+      const liberalResponses = answers.filter(answer => answer.opinion_score >= 1 && answer.opinion_score <= 3);
+      const conservativeResponses = answers.filter(answer => answer.opinion_score >= 7 && answer.opinion_score <= 9);
+      
+      let controversyScore = 0;
+      
+      if (liberalResponses.length > 0 && conservativeResponses.length > 0) {
+        // Step 2: Calculate average opinion score for each group
+        const liberalAvg = liberalResponses.reduce((sum, r) => sum + r.opinion_score, 0) / liberalResponses.length;
+        const conservativeAvg = conservativeResponses.reduce((sum, r) => sum + r.opinion_score, 0) / conservativeResponses.length;
+        
+        // Step 3: Calculate normalized separation
+        const separation = Math.abs(conservativeAvg - liberalAvg);
+        const normalizedSeparation = separation / 8;
+        
+        // Step 4: Calculate balance factor
+        const smallerGroupSize = Math.min(liberalResponses.length, conservativeResponses.length);
+        const totalPolarized = liberalResponses.length + conservativeResponses.length;
+        const balanceFactor = (smallerGroupSize / totalPolarized) * 2;
+        
+        // Step 5: Calculate polarization score
+        const polarizationScore = normalizedSeparation * balanceFactor;
+        
+        // Step 6: Calculate normalized importance
+        const normalizedImportance = importanceMean / 5;
+        
+        // Step 7: Final controversy score
+        controversyScore = polarizationScore * normalizedImportance;
+      } else {
+        // For questions without both liberal and conservative responses,
+        // use a fallback that still considers importance but gives low controversy
+        // This ensures consensus questions get non-zero scores for proper sorting
+        const normalizedImportance = importanceMean / 5;
+        const fallbackPolarization = opinionStdDeviation / 3; // Normalize std dev to roughly 0-1 range
+        controversyScore = fallbackPolarization * normalizedImportance * 0.1; // Scale down significantly
+      }
+
       // Get question details from first answer (all should have same question data)
       const questionData = Array.isArray(answers[0].questions) ? answers[0].questions[0] : answers[0].questions;
 
@@ -173,6 +212,7 @@ export async function GET() {
         opinion_mean: opinionMean,
         importance_mean: importanceMean,
         weighted_opinion_score: weightedOpinionScore,
+        controversy_score: controversyScore,
       };
     });
 
