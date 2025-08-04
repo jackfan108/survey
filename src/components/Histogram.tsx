@@ -29,7 +29,7 @@ export const Histogram: React.FC<HistogramProps> = ({
 
   return (
     <div className="p-3 sm:p-4">
-      <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 text-center">{title}</h3>
+      <h3 className="text-white font-semibold text-base sm:text-lg mb-6 sm:mb-8 text-center">{title}</h3>
       
       <div className="relative">
         
