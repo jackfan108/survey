@@ -26,7 +26,7 @@ export const WeightedScoresPlot: React.FC<WeightedScoresPlotProps> = ({ scores }
         </h2>
       </div>
 
-      <div className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-3 sm:p-6">
+      <div className="p-3 sm:p-6">
         <div className="mb-4 sm:mb-6 text-center">
           <p className="text-gray-300 text-sm sm:text-base lg:text-lg px-2">
             Individual weighted opinion scores for {validScores.length} survey responses

@@ -28,7 +28,7 @@ export const Histogram: React.FC<HistogramProps> = ({
   const safeMaxValue = actualMaxValue === 0 ? 1 : actualMaxValue;
 
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-3 sm:p-4">
+    <div className="p-3 sm:p-4">
       <h3 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4 text-center">{title}</h3>
       
       <div className="relative">

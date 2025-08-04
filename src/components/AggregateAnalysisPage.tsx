@@ -118,6 +118,7 @@ export const AggregateAnalysisPage: React.FC = () => {
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
+          highlightMetric="std_deviation"
         />
 
         {/* Most Consensus Questions */}
@@ -130,6 +131,7 @@ export const AggregateAnalysisPage: React.FC = () => {
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
+          highlightMetric="std_deviation"
         />
 
         {/* Most Important Questions */}
@@ -142,6 +144,7 @@ export const AggregateAnalysisPage: React.FC = () => {
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
+          highlightMetric="importance"
         />
 
         {/* Least Important Questions */}
@@ -154,6 +157,7 @@ export const AggregateAnalysisPage: React.FC = () => {
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
+          highlightMetric="importance"
         />
 
         {/* Most Liberal Questions */}
@@ -166,6 +170,7 @@ export const AggregateAnalysisPage: React.FC = () => {
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
+          highlightMetric="weighted_score"
         />
 
         {/* Most Conservative Questions */}
@@ -178,6 +183,7 @@ export const AggregateAnalysisPage: React.FC = () => {
           }
           showStats={true}
           className="mb-8 sm:mb-12 lg:mb-16"
+          highlightMetric="weighted_score"
         />
 
         {/* View All Questions Button */}
