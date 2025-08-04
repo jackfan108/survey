@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { apiClient, ApiError } from '../lib/api-client';
 import type { UserInfo, Question, Answer } from '../lib/api-client';
 import { UserInfoForm } from './UserInfoForm';
@@ -9,6 +10,7 @@ import { CompletionScreen } from './CompletionScreen';
 
 
 const SurveyApp = () => {
+  const router = useRouter();
   const [step, setStep] = useState<'user-info' | 'survey' | 'complete'>('user-info');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -109,6 +111,7 @@ const SurveyApp = () => {
               setUserInfo={setUserInfo}
               onSubmit={handleUserInfoSubmit}
               loading={loading}
+              onViewResults={() => router.push('/results')}
             />
           </div>
         </div>

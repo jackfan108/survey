@@ -12,13 +12,15 @@ interface UserInfoFormProps {
   setUserInfo: (userInfo: UserInfo) => void;
   onSubmit: () => void;
   loading: boolean;
+  onViewResults: () => void;
 }
 
 export const UserInfoForm: React.FC<UserInfoFormProps> = ({
   userInfo,
   setUserInfo,
   onSubmit,
-  loading
+  loading,
+  onViewResults
 }) => {
   const handleSubmit = () => {
     const validateEmail = (email: string) => {
@@ -45,7 +47,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Political Survey</h1>
           <p className="text-gray-300 text-sm sm:text-base">Help us understand your political views.</p>
-          <p className="text-gray-300 text-sm sm:text-base">Results page coming soon!</p>
         </div>
 
         <div className="space-y-4 sm:space-y-6">
@@ -102,6 +103,15 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({
               </>
             )}
           </button>
+          
+          <div className="text-center mt-4">
+            <button
+              onClick={onViewResults}
+              className="text-gray-300 hover:text-white text-sm transition-colors underline"
+            >
+              Already took the survey? Click to see results
+            </button>
+          </div>
         </div>
       </div>
     </div>
