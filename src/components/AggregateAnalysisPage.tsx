@@ -3,13 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient, ApiError } from '../lib/api-client';
-import type { QuestionAnalysis } from '../lib/api-client';
+import type { QuestionAnalysis, SurveyWeightedScore } from '../lib/api-client';
 import { QuestionGroup } from './QuestionGroup';
+import { WeightedScoresPlot } from './WeightedScoresPlot';
 import { ChevronLeft } from 'lucide-react';
 
 export const AggregateAnalysisPage: React.FC = () => {
   const router = useRouter();
   const [analysisData, setAnalysisData] = useState<QuestionAnalysis[]>([]);
+  const [weightedScores, setWeightedScores] = useState<SurveyWeightedScore[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,8 +24,13 @@ export const AggregateAnalysisPage: React.FC = () => {
     setError(null);
     
     try {
-      const data = await apiClient.getQuestionAnalysis();
-      setAnalysisData(data);
+      const [analysisData, scoresData] = await Promise.all([
+        apiClient.getQuestionAnalysis(),
+        apiClient.getSurveyWeightedScores()
+      ]);
+      
+      setAnalysisData(analysisData);
+      setWeightedScores(scoresData);
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);
@@ -98,6 +105,9 @@ export const AggregateAnalysisPage: React.FC = () => {
           </p>
         </div>
 
+        {/* Weighted Scores Distribution */}
+        <WeightedScoresPlot scores={weightedScores} />
+
         {/* Most Controversial Questions */}
         <QuestionGroup
           title="Most Controversial"
@@ -170,36 +180,14 @@ export const AggregateAnalysisPage: React.FC = () => {
           className="mb-16"
         />
 
-        {/* All Questions */}
-        <QuestionGroup
-          title="All Questions"
-          questions={analysisData}
-          showStats={false}
-        />
-
-        {/* Summary Stats */}
-        <div className="mt-12 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-          <h2 className="text-2xl font-semibold text-white mb-4 text-center">Summary Statistics</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div>
-              <div className="text-3xl font-bold text-blue-400 mb-2">
-                {analysisData.length}
-              </div>
-              <div className="text-gray-300">Questions Analyzed</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-green-400 mb-2">
-                {analysisData.reduce((sum, q) => sum + q.total_responses, 0)}
-              </div>
-              <div className="text-gray-300">Total Responses</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-purple-400 mb-2">
-                {Math.round(analysisData.reduce((sum, q) => sum + q.total_responses, 0) / analysisData.length)}
-              </div>
-              <div className="text-gray-300">Avg Responses per Question</div>
-            </div>
-          </div>
+        {/* View All Questions Button */}
+        <div className="text-center mb-16">
+          <button
+            onClick={() => router.push('/analysis/allQuestions')}
+            className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl border border-white/20 hover:border-white/30 transition-all font-medium text-lg"
+          >
+            View All Questions
+          </button>
         </div>
       </div>
     </div>

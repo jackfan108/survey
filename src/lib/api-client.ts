@@ -83,6 +83,11 @@ interface QuestionAnalysis {
   weighted_opinion_score: number;
 }
 
+interface SurveyWeightedScore {
+  survey_id: number;
+  weighted_opinion_score: number;
+}
+
 class ApiError extends Error {
   constructor(message: string, public status: number) {
     super(message);
@@ -133,7 +138,13 @@ export const apiClient = {
     const result = await handleResponse<{ data: QuestionAnalysis[] }>(response);
     return result.data;
   },
+
+  async getSurveyWeightedScores(): Promise<SurveyWeightedScore[]> {
+    const response = await fetch('/api/surveys/weighted-scores');
+    const result = await handleResponse<{ data: SurveyWeightedScore[] }>(response);
+    return result.data;
+  },
 };
 
 export { ApiError };
-export type { UserInfo, Question, Answer, SurveyResult, QuestionWithAnswer, SurveyResultsData, TagAnalysis, QuestionAnalysis, OpinionDistribution, ImportanceDistribution };
+export type { UserInfo, Question, Answer, SurveyResult, QuestionWithAnswer, SurveyResultsData, TagAnalysis, QuestionAnalysis, OpinionDistribution, ImportanceDistribution, SurveyWeightedScore };
